@@ -1,5 +1,5 @@
 # calculadora-distribuicao-apostas
-<!DOCTYPE html>
+          <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
@@ -14,7 +14,7 @@
     padding: 0;
   }
   .container {
-    max-width: 700px;
+    max-width: 750px;
     margin: 0 auto;
     padding: 20px;
   }
@@ -73,6 +73,14 @@
     font-size: 0.9em;
     color: #555;
   }
+  .resultados {
+    background: #e8f0ff;
+    border: 1px solid #0078ff;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+    font-weight: bold;
+  }
 </style>
 </head>
 <body>
@@ -84,7 +92,6 @@
 
     <label>Digite até 20 cotações:</label>
     <div class="grid" id="odds-container">
-      <!-- 20 inputs de odds -->
       <script>
         for (let i = 1; i <= 20; i++) {
           document.write(`<input type="number" step="0.01" min="1.01" id="odd${i}" placeholder="Odd ${i}" />`);
@@ -92,14 +99,24 @@
       </script>
     </div>
 
+    <label for="erros">Quantas apostas erraram?</label>
+    <input type="number" id="erros" placeholder="Ex: 2" min="0" max="20" />
+
     <button onclick="calcular()">Calcular Distribuição</button>
 
     <table id="result" style="display:none;">
       <thead>
-        <tr><th>#</th><th>Odd</th><th>Valor a Apostar (R$)</th></tr>
+        <tr>
+          <th>#</th>
+          <th>Odd</th>
+          <th>Valor a Apostar (R$)</th>
+          <th>Retorno Individual (R$)</th>
+        </tr>
       </thead>
       <tbody></tbody>
     </table>
+
+    <div id="resumo" class="resultados" style="display:none;"></div>
 
     <div class="footer">Desenvolvido para uso pessoal - Cálculo baseado em retornos iguais</div>
   </div>
@@ -107,6 +124,8 @@
   <script>
     function calcular() {
       const total = parseFloat(document.getElementById("total").value);
+      const erros = parseInt(document.getElementById("erros").value) || 0;
+
       if (isNaN(total) || total <= 0) {
         alert("Digite um valor total válido.");
         return;
@@ -123,20 +142,45 @@
         return;
       }
 
-      // cálculo
+      if (erros >= odds.length) {
+        alert("O número de apostas erradas deve ser menor que o total de apostas.");
+        return;
+      }
+
       const somaInversos = odds.reduce((s, o) => s + 1 / o, 0);
       const resultados = odds.map(o => (total / o) / somaInversos);
+      const retornos = odds.map((o, i) => resultados[i] * o);
 
-      // exibir tabela
+      // montar tabela
       const tabela = document.getElementById("result");
       const tbody = tabela.querySelector("tbody");
       tbody.innerHTML = "";
-      resultados.forEach((r, i) => {
+      retornos.forEach((ret, i) => {
         const linha = document.createElement("tr");
-        linha.innerHTML = `<td>${i + 1}</td><td>${odds[i].toFixed(2)}</td><td>${r.toFixed(2)}</td>`;
+        linha.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${odds[i].toFixed(2)}</td>
+          <td>${resultados[i].toFixed(2)}</td>
+          <td>${ret.toFixed(2)}</td>
+        `;
         tbody.appendChild(linha);
       });
       tabela.style.display = "table";
+
+      // ordenar retornos decrescentes e excluir os erros
+      const retornosValidos = [...retornos].sort((a, b) => b - a).slice(0, odds.length - erros);
+      const somaVencedores = retornosValidos.reduce((s, r) => s + r, 0);
+
+      // exibir resumo
+      const resumo = document.getElementById("resumo");
+      resumo.innerHTML = `
+        🧮 <b>Total apostado:</b> R$ ${total.toFixed(2)}<br>
+        ❌ <b>Apostas erradas:</b> ${erros}<br>
+        ✅ <b>Apostas vencedoras consideradas:</b> ${odds.length - erros}<br>
+        💰 <b>Soma dos retornos vencedores:</b> R$ ${somaVencedores.toFixed(2)}<br>
+        📊 <b>Lucro líquido (aproximado):</b> R$ ${(somaVencedores - total).toFixed(2)}
+      `;
+      resumo.style.display = "block";
     }
   </script>
 </body>
