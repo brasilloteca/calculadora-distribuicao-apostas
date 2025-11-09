@@ -1,92 +1,97 @@
-# calculadora-distribuicao-apostas
-          <!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Calculadora de Distribuição de Apostas</title>
-          !-- Ícones e favicon -->
-  <link rel="icon" href="1762689380167.jpg" type="image/jpeg">
-  <link rel="apple-touch-icon" href="1762689380167.jpg">
-  <meta name="theme-color" content="#047857" />
-          
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    color: #222;
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    max-width: 750px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 15px;
-  }
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  input[type="number"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1em;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-  }
-  button {
-    width: 100%;
-    background: #0078ff;
-    color: white;
-    padding: 12px;
-    font-size: 1.1em;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  button:hover {
-    background: #005fcc;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  th, td {
-    border: 1px solid #ddd;
-    text-align: center;
-    padding: 8px;
-  }
-  th {
-    background-color: #0078ff;
-    color: white;
-  }
-  .footer {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 0.9em;
-    color: #555;
-  }
-  .resultados {
-    background: #e8f0ff;
-    border: 1px solid #0078ff;
-    padding: 12px;
-    border-radius: 8px;
-    margin-top: 15px;
-    font-weight: bold;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Calculadora de Distribuição de Apostas</title>
+
+  <!-- Ícone padrão (favicon) -->
+  <link rel="icon" href="favicon.jpg" type="image/jpeg">
+
+  <!-- Ícone para atalhos em celular (Android/iOS) -->
+  <link rel="apple-touch-icon" href="favicon.jpg">
+
+  <!-- Cor da barra de status em dispositivos móveis -->
+  <meta name="theme-color" content="#0078ff">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #222;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    button {
+      width: 100%;
+      background: #0078ff;
+      color: white;
+      padding: 12px;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fcc;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      text-align: center;
+      padding: 8px;
+    }
+    th {
+      background-color: #0078ff;
+      color: white;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #555;
+    }
+    .resultados {
+      background: #e8f0ff;
+      border: 1px solid #0078ff;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
@@ -170,23 +175,3 @@
         `;
         tbody.appendChild(linha);
       });
-      tabela.style.display = "table";
-
-      // ordenar retornos decrescentes e excluir os erros
-      const retornosValidos = [...retornos].sort((a, b) => b - a).slice(0, odds.length - erros);
-      const somaVencedores = retornosValidos.reduce((s, r) => s + r, 0);
-
-      // exibir resumo
-      const resumo = document.getElementById("resumo");
-      resumo.innerHTML = `
-        🧮 <b>Total apostado:</b> R$ ${total.toFixed(2)}<br>
-        ❌ <b>Apostas erradas:</b> ${erros}<br>
-        ✅ <b>Apostas vencedoras consideradas:</b> ${odds.length - erros}<br>
-        💰 <b>Soma dos retornos vencedores:</b> R$ ${somaVencedores.toFixed(2)}<br>
-        📊 <b>Lucro líquido (aproximado):</b> R$ ${(somaVencedores - total).toFixed(2)}
-      `;
-      resumo.style.display = "block";
-    }
-  </script>
-</body>
-</html>
